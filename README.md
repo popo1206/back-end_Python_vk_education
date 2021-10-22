@@ -8,6 +8,7 @@
 ```py
 class TicTacGame:
 
+<<<<<<< HEAD
 def show_board():
 pass
 
@@ -24,6 +25,24 @@ if __name__ == '__main__':
 game = TicTac()
 game.start_game()
 
+=======
+	def show_board():
+		pass
+
+	def validate_input():
+		pass
+
+	def start_game():
+		pass
+
+	def check_winner():
+		pass
+
+if __name__ == '__main__':
+	game = TicTac()
+	game.start_game()
+	
+>>>>>>> ae16fbb62a653d23ccd84b2c4295248fb1453380
 ```
 
 Пользовательский ввод осуществляется с помощью input, не забудьте валидировать пользовательский ввод и выводить человеческое описание ошибки.
