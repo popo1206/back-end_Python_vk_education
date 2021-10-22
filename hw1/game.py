@@ -23,6 +23,12 @@ class ExitException(Exception):
     """
 
 
+class InitBoardException(Exception):
+    """
+    CellException
+    """
+
+
 class TicTacGame:
     """
         TicTacGame
@@ -31,7 +37,6 @@ class TicTacGame:
     def __init__(self, size=0):
         self.size = size
         self.map = []
-        self.init_board()
         self.num_steps = 0
 
     def init_board(self):
@@ -39,6 +44,8 @@ class TicTacGame:
         init_board
         """
         cell = 0
+        if isinstance(self.size,str) or (self.size <= 2):
+            raise InitBoardException
         for _ in range(0, self.size):
             self.map.append([cell + i for i in range(1, self.size + 1)])
             cell += self.size
@@ -69,26 +76,29 @@ class TicTacGame:
         """
         start_game
         """
-        print('Please enter size of desk')
+        print('Please enter size of desk more then 2')
         self.size = int(input())
-        if self.size <= 1:
+        try:
+            self.init_board()
+            self.show_board()
+            while self.check_winner:
+                try:
+                    print("Please choose a cell or finish game by 'EXIT' ")
+                    cell = input()
+                    if (cell == 'EXIT') | (cell == 'exit'):
+                        raise ExitException
+                    self.one_step(int(cell))
+                    self.show_board()
+                except IndexError:
+                    sys.stderr.write('Out of map\n')
+                except CellException:
+                    sys.stderr.write('The cell is wrong\n')
+                except ExitException:
+                    sys.exit('The game is ended! No winners!\n')
+                except ZeroDivisionError:
+                    sys.exit('The map is not defined')
+        except InitBoardException:
             sys.exit(f'Illegal size {self.size} of map in game\n')
-        self.init_board()
-        self.show_board()
-        while self.check_winner:
-            try:
-                print("Please choose a cell or finish game by 'EXIT' ")
-                cell = input()
-                if (cell == 'EXIT') | (cell == 'exit'):
-                    raise ExitException
-                self.one_step(int(cell))
-                self.show_board()
-            except IndexError:
-                sys.stderr.write('Out of map\n')
-            except CellException:
-                sys.stderr.write('The cell is wrong\n')
-            except ExitException:
-                sys.exit('The game is ended! No winners!\n')
         if self.num_steps % 2 == 1:
             print('The gamerX is a winner!')
         else:
